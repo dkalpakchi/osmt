@@ -23,10 +23,10 @@ public class TileReader {
     String inputFile;
     BufferedReader inputReader;
     
-    public int tn;
+    public long tn;
     public String previousLine;
 
-    public TileReader(String fn, int tn) {
+    public TileReader(String fn, long tn) {
         inputFile = fn;
         this.tn = tn;
         previousLine = "";

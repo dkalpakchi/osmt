@@ -25,7 +25,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Tile {
-    public int tn;
+    public long tn;
     public TreeMap<Long, String> nodesMap;
     public TreeSet<Long> nodes;
     public TreeSet<Long> nodesExtra;
@@ -33,7 +33,7 @@ public class Tile {
     String dataDir, tileFn, nodesFn, nodesExtraFn, waysFn, relationsFn;
     Writer tileWriter, nodesWriter, nodesExtraWriter, waysWriter, relationsWriter;
 
-    public Tile(int tn, String dataDir) {
+    public Tile(long tn, String dataDir) {
         this.tn = tn;
         this.dataDir = dataDir;
         

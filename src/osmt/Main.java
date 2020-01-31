@@ -149,8 +149,8 @@ public class Main {
             if (main.params.containsKey("tile-size") && main.params.get("tile-size") != "") {
                 tilesize = Float.parseFloat(main.params.get("tile-size"));
                 
-                if (tilesize < 0.006F) {
-                    System.err.println("Error: Tile size must be 0.006 degrees or more");
+                if (tilesize < 0.0001F) {
+                    System.err.println("Error: Tile size must be 0.0001 degrees or more");
                     System.exit(1);
                 }
                 main.params.remove("tile-size");

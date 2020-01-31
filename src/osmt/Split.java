@@ -32,21 +32,21 @@ public class Split {
     
     float nodeLat, nodeLon;
     long nodeId = 0, ref = 0, firstRef = 0, previousRef = 0;
-    int tn = 0, previousTn = 0;
+    long tn = 0, previousTn = 0;
     String line, wayLine = "";
     String target = "";
     Tile t, previousT;
     
     HashMap<String, String> attr;
     
-    HashMap<Integer, Tile> tilesMap = new HashMap<Integer, Tile>();
+    HashMap<Long, Tile> tilesMap = new HashMap<Long, Tile>();
     
     //sets and maps used during way processing
     HashSet<Tile> tiles = new HashSet<Tile>();  //tilesWayIsIn
     HashMap<Tile, Boolean> refsHaveBeenWritten = new HashMap<Tile, Boolean>();
     HashMap<Tile, Long> lastRemoteNodeAdded = new HashMap<Tile, Long>();
     HashMap<Tile, ArrayList<Long>> refs = new HashMap<Tile, ArrayList<Long>>();
-    HashMap<Tile, ArrayList<Integer>> refTn = new HashMap<Tile, ArrayList<Integer>>();
+    HashMap<Tile, ArrayList<Long>> refTn = new HashMap<Tile, ArrayList<Long>>();
 
     // for relation processing
     class RelationMember {
@@ -214,7 +214,7 @@ public class Split {
                 //init
                 if (!refs.containsKey(t)) {
                     refs.put(t, new ArrayList<Long>());
-                    refTn.put(t, new ArrayList<Integer>());
+                    refTn.put(t, new ArrayList<Long>());
                     lastRemoteNodeAdded.put(t, 0L);
                 }
                 
@@ -265,7 +265,7 @@ public class Split {
                 
                 //other nd
                 refs.get(t).add(ref);
-                refTn.get(t).add(0);
+                refTn.get(t).add(0L);
                 
                 if (firstRef == 0) {
                     firstRef = ref;
@@ -328,7 +328,9 @@ public class Split {
                                 tn = n2tn.getTn(node);
                                 if (tn > 0) {
                                     t = tilesMap.get(tn);
-                                    tiles.add(t);
+                                    if (t != null) {
+                                        tiles.add(t);
+                                    }
 
                                     //init
                                     if (!members.containsKey(t)) {
@@ -344,7 +346,9 @@ public class Split {
                         tn = n2tn.getTn(ref);
                         if (tn > 0) {
                             t = tilesMap.get(tn);
-                            tiles.add(t);
+                            if (t != null) {
+                                tiles.add(t);
+                            }
 
                             //init
                             if (!members.containsKey(t)) {

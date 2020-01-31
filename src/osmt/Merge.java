@@ -43,10 +43,10 @@ public class Merge {
         inputTiles = new ArrayList<TileReader>(inputFiles.size());
         
         for (String fn : inputFiles) {
-            int tn = 0;
+            long tn = 0;
             
             try {
-                tn = Integer.parseInt(fn.substring(fn.lastIndexOf("/") + 1).split("\\.")[0]);
+                tn = Long.parseLong(fn.substring(fn.lastIndexOf("/") + 1).split("\\.")[0]);
             } catch (Exception e) {
                 System.err.println("Warning: ignoring file " + fn);
             }
@@ -205,7 +205,7 @@ public class Merge {
                     
                     //tn attribute?
                     tnFound = attr.containsKey("tn");
-                    segment.refTn.add(tnFound ? Integer.parseInt(attr.get("tn")) : 0);
+                    segment.refTn.add(tnFound ? Long.parseLong(attr.get("tn")) : 0);
                     
                     if (tnFound) splitWay = true;
                 }
@@ -358,7 +358,7 @@ public class Merge {
         //trim duplicate closed-way nodes
         for (int i = 0; i < segments.size(); i++) {
             ArrayList<Long> r = segments.get(i).refs;
-            ArrayList<Integer> rtn = segments.get(i).refTn;
+            ArrayList<Long> rtn = segments.get(i).refTn;
             
             if (rtn.get(rtn.size() - 1) != 0 && rtn.get(rtn.size() - 2) != 0) {
                 rtn.remove(rtn.size() - 1);
@@ -592,17 +592,17 @@ if (debug) {
 
 class WaySegment {
     ArrayList<Long> refs;
-    ArrayList<Integer> refTn;
-    Integer tn;
+    ArrayList<Long> refTn;
+    Long tn;
     
     WaySegment() {
         refs = new ArrayList<Long>();
-        refTn = new ArrayList<Integer>();
+        refTn = new ArrayList<Long>();
     }
 
     WaySegment(WaySegment ws) {
         refs = new ArrayList<Long>(ws.refs);
-        refTn = new ArrayList<Integer>(ws.refTn);
+        refTn = new ArrayList<Long>(ws.refTn);
         tn = ws.tn;
     }
     

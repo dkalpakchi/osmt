@@ -39,20 +39,20 @@ public class NodeToTileNumber {
      * @return
      * @throws IOException
      */
-    public int setTn(long nodeId, float lat, float lon) throws IOException {
+    public long setTn(long nodeId, float lat, float lon) throws IOException {
         //4 bytes for tile number
-        long seekPos = nodeId*4;
+        long seekPos = nodeId*8;
         
         if (this.node2tn.length() < seekPos) {
-            this.node2tn.setLength(seekPos + (4*1024*1024*100));
+            this.node2tn.setLength(seekPos + (8*1024*1024*100));
         }
         
         boolean coordinatesValid = 90.0 >= lat && -90.0 <= lat && -180.0 <= lon && 180.0 >= lon;
 
         if (coordinatesValid) {
-            int tn = ((lat+lon) != 0) ? calcTn(lat, lon) : -1;
+            long tn = ((lat+lon) != 0) ? calcTn(lat, lon) : -1;
             this.node2tn.seek(seekPos);
-            this.node2tn.writeInt(tn);
+            this.node2tn.writeLong(tn);
             return tn;
         }
         return -1;
@@ -64,15 +64,15 @@ public class NodeToTileNumber {
      * @param tn
      * @throws IOException
      */
-    public void setTn(long nodeId, int tn) throws IOException {
-        long seekPos = nodeId*4;
+    public void setTn(long nodeId, long tn) throws IOException {
+        long seekPos = nodeId*8;
         
         if (this.node2tn.length() < seekPos) {
-            this.node2tn.setLength(seekPos + (4*1024*1024*100));
+            this.node2tn.setLength(seekPos + (8*1024*1024*100));
         }
 
         this.node2tn.seek(seekPos);
-        this.node2tn.writeInt(tn);
+        this.node2tn.writeLong(tn);
     }
 
     /**
@@ -81,9 +81,9 @@ public class NodeToTileNumber {
      * @return
      * @throws Exception
      */
-    public int getTn(long nodeId) throws Exception {
-        node2tn.seek(nodeId*4);
-        int tn = node2tn.readInt();
+    public long getTn(long nodeId) throws Exception {
+        node2tn.seek(nodeId*8);
+        long tn = node2tn.readLong();
         return tn;
     }
     
@@ -93,8 +93,8 @@ public class NodeToTileNumber {
      * @param lon
      * @return
      */
-    public static int calcTn(float lat, float lon) {
-        return ((int)((lat + 90)/tilesizeLat) + (int)((lon + 180)/tilesizeLon) * (int)(180/tilesizeLon)) + 1;
+    public static long calcTn(float lat, float lon) {
+        return ((long)((lat + 90)/tilesizeLat) + (long)((lon + 180)/tilesizeLon) * (long)(180/tilesizeLon)) + 1;
     }
     
     /**
@@ -102,9 +102,9 @@ public class NodeToTileNumber {
      * @param tn
      * @return
      */
-    public static float[] getBounds(int tn) {
+    public static float[] getBounds(long tn) {
         float minlat = ((tn - 1) % (180/tilesizeLon)) * tilesizeLat - 90;
-        float minlon = (int)((tn - 1) * (tilesizeLon/180)) * tilesizeLat - 180;
+        float minlon = (long)((tn - 1) * (tilesizeLon/180)) * tilesizeLat - 180;
         float maxlat = minlat + tilesizeLat;
         float maxlon = minlon + tilesizeLon;
         return new float[] {minlat, minlon, maxlat, maxlon};
